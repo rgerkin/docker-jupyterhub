@@ -33,6 +33,8 @@
 *.top
 *.tui
 *.vrb
+jupyterhub_config_private.py
+__pycache__
 
 # Mac IDE files
 *.swp

@@ -21,15 +21,15 @@ RUN conda install -c conda-forge jupyter_nbextensions_configurator \
     pandas \
     scipy \
     sympy \
+    rise \
     && conda clean -ay
+
+RUN pip install oauthenticator
 
 COPY jupyterhub_config.py /
 
 # Create admin user
-RUN useradd -ms /bin/bash admin
-
-# Create a mountpoint
-VOLUME /data
+RUN useradd -ms /bin/bash rgerkin
 
 # Setup application
 EXPOSE 8000
