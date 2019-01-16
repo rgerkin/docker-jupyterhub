@@ -1,0 +1,1 @@
+docker run -p 8000:8000 -it --name jupyterhub -v jupyterhub-etc:/etc -v jupyterhub-home:/home jupyterhub /bin/bash
