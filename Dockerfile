@@ -22,9 +22,20 @@ RUN conda install -c conda-forge jupyter_nbextensions_configurator \
     scipy \
     sympy \
     rise \
+    seaborn \
     && conda clean -ay
 
-RUN pip install oauthenticator
+RUN pip install \
+    oauthenticator \
+    nbdime \
+    allensdk \
+    quantities \
+    brian2
+
+git config --global user.email "rgerkin@asu.edu"
+git config --global user.name "Rick Gerkin"
+nbdime config-git --enable --global
+jupyter lab build
 
 COPY jupyterhub_config.py /
 
