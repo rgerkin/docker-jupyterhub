@@ -28,15 +28,16 @@ RUN conda install -c conda-forge jupyter_nbextensions_configurator \
 RUN pip install \
     oauthenticator \
     nbdime \
-    allensdk \
-    quantities \
-    brian2
+    quantities
 
-git config --global user.email "rgerkin@asu.edu"
-git config --global user.name "Rick Gerkin"
-nbdime config-git --enable --global
-jupyter lab build
+# RUN pip install brian2 allensdk
 
+RUN git config --global user.email "rgerkin@asu.edu"
+RUN git config --global user.name "Rick Gerkin"
+RUN nbdime config-git --enable --global
+RUN jupyter lab build
+
+COPY jupyterhub_config_private.py /
 COPY jupyterhub_config.py /
 
 # Create admin user

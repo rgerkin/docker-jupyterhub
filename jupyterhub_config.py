@@ -10,6 +10,9 @@ runtime_dir = os.path.join('/etc/jupyterhub')
 c.Spawner.default_url = '/lab'
 c.Spawner.debug = True
 
+# Redirect HTTP requests on port 80 to the server on HTTPS
+c.ConfigurableHTTPProxy.command = ['configurable-http-proxy', '--redirect-port', '8000']
+
 c.JupyterHub.ssl_key = pjoin(runtime_dir,'my.key')
 c.JupyterHub.ssl_cert = pjoin(runtime_dir,'my.cert')
 c.JupyterHub.cookie_secret_file = pjoin(runtime_dir, 'cookie_secret')

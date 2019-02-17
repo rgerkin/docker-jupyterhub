@@ -1,1 +1,11 @@
-docker run -p 8000:8000 -d --name jupyterhub -v jupyterhub-etc:/etc -v jupyterhub-home:/home jupyterhub /bin/bash -c "sh /home/rgerkin/fix-permissions; jupyterhub -f /etc/jupyterhub/jupyterhub_config.py"
+# Branch name
+branch=$(git rev-parse --abbrev-ref HEAD)
+if [ $branch == "dev" ]; then
+  port=9000
+else
+  port=8000
+fi
+echo $branch
+echo $port
+
+docker run -p ${port}:8000 -d --name jupyterhub_${branch} jupyterhub_${branch} /bin/bash -c "jupyterhub -f jupyterhub_config.py"
