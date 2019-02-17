@@ -8,4 +8,4 @@ fi
 echo $branch
 echo $port
 
-docker run -p ${port}:8000 -d --name jupyterhub_${branch} jupyterhub_${branch} /bin/bash -c "jupyterhub -f jupyterhub_config.py"
+docker run -p ${port}:8000 -d --name jupyterhub_${branch} --volumes-from jupyterhub_master jupyterhub_${branch} /bin/bash -c "jupyterhub -f jupyterhub_config.py"

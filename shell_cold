@@ -1,6 +1,6 @@
 branch=$(git rev-parse --abbrev-ref HEAD)
 echo $branch
-if [$branch = 'dev']; then
+if [ $branch = "dev" ]; then
   port=9000
 else
   port=8000
