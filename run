@@ -8,4 +8,4 @@ fi
 echo $branch
 echo $port
 
-docker run -p ${port}:8000 -d --name jupyterhub_${branch} --volumes-from jupyterhub_master jupyterhub_${branch} /bin/bash -c "jupyterhub -f jupyterhub_config.py"
+docker run -p ${port}:8000 -d --name jupyterhub_${branch} -v jupyterhub-etc:/etc -v jupyterhub-home:/home jupyterhub_${branch} /bin/bash -c "sh /home/rgerkin/fix_permissions; jupyterhub -f /etc/jupyterhub/jupyterhub_config.py"

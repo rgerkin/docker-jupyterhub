@@ -37,7 +37,7 @@ RUN git config --global user.name "Rick Gerkin"
 RUN nbdime config-git --enable --global
 RUN jupyter lab build
 
-COPY jupyterhub_config_private.py /
+COPY jupyterhub_config_private.json /
 COPY jupyterhub_config.py /
 
 # Create admin user
