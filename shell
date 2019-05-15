@@ -1,4 +1,4 @@
 branch=$(git rev-parse --abbrev-ref HEAD)
 echo $branch
 
-docker exec -it jupyterhub_${branch} /bin/bash
+docker exec -it --user rgerkin jupyterhub_${branch} /bin/bash

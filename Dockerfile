@@ -1,6 +1,7 @@
 FROM continuumio/miniconda3:latest
 
-Label Joerg Klein <kwp.klein@gmail.com>
+Original: Joerg Klein <kwp.klein@gmail.com>
+Modifications: Rick Gerkin <rgerkin at asu dot edu>
 
 # Install all OS dependencies for fully functional notebook server
 RUN apt-get update -y \
@@ -23,12 +24,24 @@ RUN conda install -c conda-forge jupyter_nbextensions_configurator \
     sympy \
     rise \
     seaborn \
+    scikit-learn \
+    ipyvolume \
+    h5py \
+    requests \
+    nbgrader \
+    scikit-image
     && conda clean -ay
+
+# conda install -c conda-forge nodejs  # or some other way to have a recent nod
+RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager
+RUN jupyter labextension install ipyvolume
+RUN jupyter labextension install jupyter-threejs
 
 RUN pip install \
     oauthenticator \
     nbdime \
-    quantities
+    quantities \
+    fastcluster
 
 # RUN pip install brian2 allensdk
 

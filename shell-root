@@ -1,0 +1,4 @@
+branch=$(git rev-parse --abbrev-ref HEAD)
+echo $branch
+
+docker exec -it jupyterhub_${branch} /bin/bash
