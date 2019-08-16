@@ -1,18 +1,19 @@
 FROM continuumio/miniconda3:latest
 
-Original: Joerg Klein <kwp.klein@gmail.com>
-Modifications: Rick Gerkin <rgerkin at asu dot edu>
+# Original: Joerg Klein <kwp.klein@gmail.com>
+# Modifications: Rick Gerkin <rgerkin at asu dot edu>
 
-# Install all OS dependencies for fully functional notebook server
+# Install OS packages and clean up
 RUN apt-get update -y \
-    && apt-get install -y --no-install-recommends \
+ && apt-get install -y --no-install-recommends \
     git \
     nano \
     unzip \
+    build-essential \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install conda and Jupyter
+# Install and update many packages with conda
 RUN conda update -y conda
 RUN conda install -c conda-forge jupyter_nbextensions_configurator \
     jupyterhub \
@@ -29,35 +30,56 @@ RUN conda install -c conda-forge jupyter_nbextensions_configurator \
     h5py \
     requests \
     nbgrader \
-    scikit-image
+    scikit-image \
+    pymc3 \
+    pystan \
+    rpy2 \
+    tzlocal \
+    pip \
+    arviz \
     && conda clean -ay
 
-# conda install -c conda-forge nodejs  # or some other way to have a recent nod
-RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager
-RUN jupyter labextension install ipyvolume
-RUN jupyter labextension install jupyter-threejs
+# Neuroscience stuff
+RUN conda install -c conda-forge \
+    brian2 \
+    neuron
 
+# Packages that are only on pip
 RUN pip install \
     oauthenticator \
     nbdime \
     quantities \
-    fastcluster
+    fastcluster \
+    rickpy \
+    allensdk
 
-# RUN pip install brian2 allensdk
+# Rick's branch of JupyterHub
+RUN git clone https://github.com/rgerkin/jupyterhub
+WORKDIR jupyterhub
+RUN pip install -e .
+WORKDIR ..
 
+# SciUnit
+RUN git clone https://github.com/scidash/sciunit
+WORKDIR sciunit
+RUN pip install -e .
+WORKDIR ..
+
+# Git configuration
 RUN git config --global user.email "rgerkin@asu.edu"
 RUN git config --global user.name "Rick Gerkin"
 RUN nbdime config-git --enable --global
+
+# Setup Jupyter Lab
+RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager
+RUN jupyter labextension install ipyvolume
+RUN jupyter labextension install jupyter-threejs
 RUN jupyter lab build
 
-COPY jupyterhub_config_private.json /
-COPY jupyterhub_config.py /
-
-# Create admin user
-RUN useradd -ms /bin/bash rgerkin
+# Admin files
+COPY config /etc/jupyterhub
+COPY config/passwd /etc/passwd
 
 # Setup application
 EXPOSE 8000
-
 CMD ["jupyterhub", "--ip='*'", "--port=8000", "--no-browser", "--allow-root"]
-

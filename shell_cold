@@ -1,9 +1,0 @@
-branch=$(git rev-parse --abbrev-ref HEAD)
-echo $branch
-if [ $branch = "dev" ]; then
-  port=9000
-else
-  port=8000
-fi
-
-docker run -p ${port}:8000 -it --name jupyterhub_${branch} -v jupyterhub-etc:/etc -v jupyterhub-home:/home jupyterhub_${branch} /bin/bash

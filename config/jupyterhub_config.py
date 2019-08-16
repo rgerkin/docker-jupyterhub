@@ -9,10 +9,7 @@ runtime_dir = os.path.join('/etc/jupyterhub')
 # Change from Jupyter Notebook to JupyterLab
 c.Spawner.default_url = '/lab'
 c.Spawner.debug = True
-
-# Redirect HTTP requests on port 80 to the server on HTTPS
-#c.ConfigurableHTTPProxy.command = ['configurable-http-proxy', '--redirect-port', '8000']
-
+c.Spawner.args = ['--MappingKernelManager.cull_idle_timeout=604800', '--MappingKernelManager.cull_interval=300']
 c.JupyterHub.ssl_key = pjoin(runtime_dir,'my.key')
 c.JupyterHub.ssl_cert = pjoin(runtime_dir,'my.cert')
 c.JupyterHub.cookie_secret_file = pjoin(runtime_dir, 'cookie_secret')
@@ -35,3 +32,5 @@ a.client_secret = s['client_secret']
 a.create_system_users = True
 a.admin_users = s['admin_users']
 a.whitelist = s['white_list']
+from uids import uids
+a.uids = uids
