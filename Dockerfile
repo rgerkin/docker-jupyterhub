@@ -46,20 +46,28 @@ RUN conda install -c conda-forge \
 
 # Packages that are only on pip
 RUN pip install \
-    oauthenticator \
+oauthenticator \
     nbdime \
     quantities \
     fastcluster \
     rickpy \
     allensdk
 
+# Setup Jupyter Lab
+RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager
+RUN jupyter labextension install ipyvolume
+RUN jupyter labextension install jupyter-threejs
+RUN jupyter lab build
+
 # Rick's branch of JupyterHub
+ADD https://api.github.com/repos/rgerkin/jupyterhub/git/refs/heads/master jupyterhub_version.json
 RUN git clone https://github.com/rgerkin/jupyterhub
 WORKDIR jupyterhub
 RUN pip install -e .
 WORKDIR ..
 
 # SciUnit
+ADD https://api.github.com/repos/scidash/sciunit/git/refs/heads/master sciunit_version.json
 RUN git clone https://github.com/scidash/sciunit
 WORKDIR sciunit
 RUN pip install -e .
@@ -70,15 +78,9 @@ RUN git config --global user.email "rgerkin@asu.edu"
 RUN git config --global user.name "Rick Gerkin"
 RUN nbdime config-git --enable --global
 
-# Setup Jupyter Lab
-RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager
-RUN jupyter labextension install ipyvolume
-RUN jupyter labextension install jupyter-threejs
-RUN jupyter lab build
-
 # Admin files
 COPY config /etc/jupyterhub
-COPY config/passwd /etc/passwd
+RUN chmod -R o-rwx /etc/jupyterhub
 
 # Setup application
 EXPOSE 8000
