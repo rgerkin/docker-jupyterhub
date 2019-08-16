@@ -79,8 +79,8 @@ RUN git config --global user.name "Rick Gerkin"
 RUN nbdime config-git --enable --global
 
 # Admin files
-COPY config /etc/jupyterhub
-RUN chmod -R o-rwx /etc/jupyterhub
+# COPY config /etc/jupyterhub
+# RUN chmod -R o-rwx /etc/jupyterhub
 
 # Setup application
 EXPOSE 8000

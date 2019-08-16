@@ -1,0 +1,17 @@
+version: '3.7'
+services:
+  jupyter-hub:
+    build: .
+    image: $USER/jupyterhub:$BRANCH
+    ports:
+      - "$HOST_PORT:$CONTAINER_PORT"
+    container_name: jupyterhub_$BRANCH
+    volumes:
+      - $JUPYTERHUB_CONFIG:/etc/jupyterhub
+      - jupyterhub-home:/home
+      - $HOST_VOLUME_1:$CONTAINER_VOLUME_1
+    command: /bin/bash -c "jupyterhub -f /etc/jupyterhub/jupyterhub_config.py"
+
+volumes:
+  jupyterhub-home:
+    external: true
